@@ -1,0 +1,4 @@
+Flask==2.0.3
+pandas==2.2.3
+pyspark
+py4j==0.10.9.7
