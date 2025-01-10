@@ -1,4 +1,6 @@
-# Pipeline de Dados Bovespa
+# Tech Challenge 3MLET
+**Membros:**<br/> 
+Kleryton de Souza Maria, Lucas Paim de Paula,Maiara Giavoni,Rafael Tafelli dos Santos.
 
 Este projeto implementa um pipeline completo para extrair, processar e analisar dados do pregão da B3 utilizando AWS S3, Glue, Lambda e Athena. O objetivo é permitir a ingestão, transformação e análise dos dados históricos do mercado de ações da B3, conforme descrito no desafio.
 
