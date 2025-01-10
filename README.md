@@ -81,3 +81,34 @@ def lambda_handler(event, context):
     except Exception as e:
         print(f"Erro ao iniciar o Job Glue: {str(e)}")
 ```
+## Código do Job Glue
+
+O código do job Glue foi escrito utilizando o AWS Glue Studio, utilizando um script Python com as seguintes transformações:
+
+- Leitura de dados CSV do S3.
+- Mudança de esquema das colunas.
+- Agregação de dados utilizando funções de agregação do Spark.
+- Transformação personalizada com cálculos e renomeações de colunas.
+- Escrita dos dados refinados em S3 no formato Parquet e particionado por data e nome da ação.
+
+### Tabela no Glue Catalog
+A tabela no Glue Catalog é automaticamente criada e atualizada após o processamento dos dados, permitindo consultas rápidas e eficientes no Athena.
+
+### Athena
+Após os dados serem processados e catalogados, o Athena é utilizado para realizar consultas SQL sobre os dados. O Athena permite a análise interativa e a visualização dos dados.
+
+## Como Executar
+
+### Configuração Inicial:
+1. Carregue os dados brutos no bucket S3 `s3://stage-dados-brutos/`.
+2. A trigger Lambda será acionada automaticamente quando novos arquivos forem enviados.
+
+### Execução do Job ETL:
+1. A Lambda iniciará o job Glue automaticamente, realizando todas as transformações e salvando os dados no bucket `s3://refined-bovespa/tb_transformacao_dados_bovespa/`.
+
+### Consultas no Athena:
+1. Após a execução do job, você pode acessar os dados no Athena para realizar consultas SQL e análises.
+
+## Conclusão
+Este pipeline automatiza a ingestão, transformação e análise dos dados do pregão da B3 utilizando os serviços da AWS. Ele permite que os dados sejam extraídos, processados e armazenados de forma eficiente, tornando-os facilmente acessíveis para análise.
+
