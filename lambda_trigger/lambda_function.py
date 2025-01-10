@@ -1,5 +1,4 @@
 import boto3
-import json
 
 glue_job_name = "etl-transformacao-dados-bovespa" 
 glue_client = boto3.client('glue')
