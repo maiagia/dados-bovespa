@@ -1,1 +1,83 @@
-# dados-bovespa
+# Pipeline de Dados Bovespa
+
+Este projeto implementa um pipeline completo para extrair, processar e analisar dados do pregão da B3 utilizando AWS S3, Glue, Lambda e Athena. O objetivo é permitir a ingestão, transformação e análise dos dados históricos do mercado de ações da B3, conforme descrito no desafio.
+
+## Arquitetura
+
+A arquitetura do pipeline segue o seguinte fluxo:
+
+![Diagrama sem nome drawio (6)](https://github.com/user-attachments/assets/579b8781-1676-4acb-b018-dd955ae0e8aa)
+
+
+1. **Lambda Scraping**: Uma função Lambda é responsável por extrair os dados do site da B3 e enviar para o bucket S3 de dados brutos.
+2. **S3 - Dados Brutos**: O bucket S3 armazena os dados extraídos em formato bruto. Esses dados são armazenados em arquivos CSV e organizados por data.
+3. **Lambda Trigger Glue**: Sempre que novos arquivos chegam ao bucket de dados brutos, uma trigger Lambda é acionada para iniciar o job de transformação no AWS Glue.
+4. **Glue ETL Transformação Bovespa**: O job Glue realiza diversas transformações nos dados, como:
+   - Agrupamento de dados numéricos (sum, count, etc).
+   - Renomeação de colunas.
+   - Cálculo da diferença entre datas.
+5. **S3 - Dados Refinados**: Os dados transformados são salvos em formato Parquet, particionados por data e nome/abreviação da ação no bucket S3 de dados refinados.
+6. **Glue Catalog**: O Glue Catalog é automaticamente atualizado com os metadados dos dados transformados, criando uma tabela no banco de dados default.
+7. **Athena**: O Athena permite a consulta SQL dos dados catalogados e a visualização das análises.
+8. **Cliente**: O cliente pode realizar consultas e análises através do Athena.
+
+## Requisitos
+
+### Pipeline Batch Bovespa
+
+1. **Scrap de Dados do Site da B3**:
+   - A função Lambda extrai os dados diretamente do site da B3 e envia para o bucket S3.
+
+2. **Ingestão de Dados no S3**:
+   - Os dados brutos são armazenados em S3 no formato CSV e convertidos para o formato Parquet.
+   - O armazenamento é particionado diariamente.
+
+3. **Lambda para Acionar Glue**:
+   - A Lambda aciona automaticamente o job de ETL no Glue sempre que novos dados são enviados para o bucket S3.
+
+4. **Transformações no Glue**:
+   - **Agrupamento numérico**: Sumarização, contagem ou soma.
+   - **Renomeação de colunas**: Duas colunas são renomeadas.
+   - **Cálculo de datas**: Realiza cálculo como diferença entre datas.
+
+5. **Salvamento de Dados Refinados**:
+   - Os dados refinados são armazenados em Parquet, particionados por data e nome/abreviação da ação.
+
+6. **Glue Catalog**:
+   - O job Glue automaticamente catalogará os dados no Glue Catalog.
+
+7. **Consultas e Visualizações no Athena**:
+   - Após o processamento, os dados estarão disponíveis no Athena para consultas SQL.
+
+### Estrutura do Código
+
+#### Job ETL Glue
+
+O job de transformação ETL foi desenvolvido utilizando o AWS Glue, com as seguintes etapas:
+
+- **Leitura de Dados do S3**: Dados brutos são lidos de um bucket S3 utilizando o formato CSV.
+- **Transformação dos Dados**:
+  - **Mudança de esquema**: As colunas do DataFrame são renomeadas e ajustadas.
+  - **Agregação**: Realiza agrupamento de dados por nome da ação e data de referência da carteira.
+  - **Cálculos de Data**: Calcula a diferença em dias entre a data atual e a data de referência da carteira.
+- **Escrita dos Dados Transformados no S3**: Os dados transformados são salvos em formato Parquet no S3, particionados por data e nome da ação.
+- **Catalogação no Glue Catalog**: O job atualiza o Glue Catalog com os metadados dos dados refinados.
+
+#### Função Lambda
+
+A função Lambda é responsável por acionar o job Glue sempre que novos arquivos são enviados para o bucket S3. A função utiliza o Boto3 para interagir com o AWS Glue.
+
+```python
+import boto3
+import json
+
+glue_job_name = "etl-transformacao-dados-bovespa" 
+glue_client = boto3.client('glue')
+
+def lambda_handler(event, context):
+    try:
+        response = glue_client.start_job_run(JobName=glue_job_name)
+        print(f"Job {glue_job_name} iniciado com sucesso! JobRunId: {response['JobRunId']}")
+    except Exception as e:
+        print(f"Erro ao iniciar o Job Glue: {str(e)}")
+```
