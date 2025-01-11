@@ -1,4 +1,4 @@
-Flask==2.0.3
-pandas==2.2.3
-pyspark
-py4j==0.10.9.7
+boto3==1.35.97
+numpy==2.0.1
+pandas==2.2.2
+requests==2.31.0
