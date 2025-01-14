@@ -68,25 +68,25 @@ job = Job(glueContext)
 job.init(args['JOB_NAME'], args)
 
 # Script generated for node Amazon S3
-AmazonS3_node1736304019816 = glueContext.create_dynamic_frame.from_options(format_options={"quoteChar": "\"", "withHeader": True, "separator": ",", "optimizePerformance": False}, connection_type="s3", format="csv", connection_options={"paths": ["s3://stage-dados-brutos"], "recurse": True}, transformation_ctx="AmazonS3_node1736304019816")
+AmazonS3_node1736304019816 = glueContext.create_dynamic_frame.from_options(format_options={}, connection_type="s3", format="parquet", connection_options={"paths": ["s3://stage-dados-brutos/ano=2025/"], "recurse": True}, transformation_ctx="AmazonS3_node1736304019816")
 
 # Script generated for node Change Schema
-ChangeSchema_node1736384274380 = ApplyMapping.apply(frame=AmazonS3_node1736304019816, mappings=[("nme_setor", "string", "nme_setor", "string"), ("cod_empresa", "string", "cod_empresa", "string"), ("nme_acao", "string", "NomeAcao", "string"), ("dsc_tipo", "string", "dsc_tipo", "string"), ("val_participacao_setor", "string", "val_participacao_setor", "double"), ("val_participacao_acumulada_setor", "string", "val_participacao_acumulada_setor", "string"), ("qtd_teorica", "string", "QtdTeoricaTotal", "string"), ("dt_referencia_carteira", "string", "DataReferenciaCarteira", "string"), ("qtd_teorica_total", "string", "qtd_teorica_total", "string"), ("qtd_redutor", "string", "qtd_redutor", "string"), ("dt_extracao", "string", "dt_extracao", "string")], transformation_ctx="ChangeSchema_node1736384274380")
+ChangeSchema_node1736384274380 = ApplyMapping.apply(frame=AmazonS3_node1736304019816, mappings=[("nme_setor", "string", "nme_setor", "string"), ("cod_empresa", "string", "cod_empresa", "string"), ("nme_acao", "string", "NomeAcao", "string"), ("dsc_tipo", "string", "dsc_tipo", "string"), ("val_participacao_setor", "double", "val_participacao_setor", "double"), ("val_participacao_acumulada_setor", "double", "val_participacao_acumulada_setor", "string"), ("qtd_teorica", "double", "qtd_teorica", "string"), ("dt_referencia_carteira", "bigint", "dt_referencia_carteira", "string"), ("qtd_teorica_total", "double", "qtd_teorica_total", "string"), ("qtd_redutor", "double", "qtd_redutor", "string"), ("dt_extracao", "string", "dt_extracao", "timestamp")], transformation_ctx="ChangeSchema_node1736384274380")
 
 # Script generated for node Aggregate
-Aggregate_node1736383572625 = sparkAggregate(glueContext, parentFrame = ChangeSchema_node1736384274380, groups = ["NomeAcao", "DataReferenciaCarteira"], aggs = [["val_participacao_setor", "sum"], ["cod_empresa", "countDistinct"]], transformation_ctx = "Aggregate_node1736383572625")
+Aggregate_node1736383572625 = sparkAggregate(glueContext, parentFrame = ChangeSchema_node1736384274380, groups = ["NomeAcao", "dt_referencia_carteira"], aggs = [["val_participacao_setor", "sum"], ["cod_empresa", "countDistinct"]], transformation_ctx = "Aggregate_node1736383572625")
 
 # Script generated for node Select Fields
-SelectFields_node1736449430913 = SelectFields.apply(frame=ChangeSchema_node1736384274380, paths=["QtdTeoricaTotal", "NomeAcao", "DataReferenciaCarteira"], transformation_ctx="SelectFields_node1736449430913")
+SelectFields_node1736449430913 = SelectFields.apply(frame=ChangeSchema_node1736384274380, paths=["QtdTeoricaTotal", "NomeAcao", "DataReferenciaCarteira", "dt_referencia_carteira", "qtd_teorica_total"], transformation_ctx="SelectFields_node1736449430913")
 
 # Script generated for node Renamed keys for Join
-RenamedkeysforJoin_node1736449660559 = ApplyMapping.apply(frame=SelectFields_node1736449430913, mappings=[("QtdTeoricaTotal", "string", "right_QtdTeoricaTotal", "string"), ("NomeAcao", "string", "right_NomeAcao", "string"), ("DataReferenciaCarteira", "string", "right_DataReferenciaCarteira", "string")], transformation_ctx="RenamedkeysforJoin_node1736449660559")
+RenamedkeysforJoin_node1736819163285 = ApplyMapping.apply(frame=SelectFields_node1736449430913, mappings=[("NomeAcao", "string", "right_NomeAcao", "string"), ("dt_referencia_carteira", "string", "right_dt_referencia_carteira", "string"), ("qtd_teorica_total", "string", "right_qtd_teorica_total", "string")], transformation_ctx="RenamedkeysforJoin_node1736819163285")
 
 # Script generated for node Join
-Join_node1736449634945 = Join.apply(frame1=Aggregate_node1736383572625, frame2=RenamedkeysforJoin_node1736449660559, keys1=["NomeAcao", "DataReferenciaCarteira"], keys2=["right_NomeAcao", "right_DataReferenciaCarteira"], transformation_ctx="Join_node1736449634945")
+Join_node1736449634945 = Join.apply(frame1=Aggregate_node1736383572625, frame2=RenamedkeysforJoin_node1736819163285, keys1=["NomeAcao", "dt_referencia_carteira"], keys2=["right_NomeAcao", "right_dt_referencia_carteira"], transformation_ctx="Join_node1736449634945")
 
 # Script generated for node Change Schema
-ChangeSchema_node1736451072089 = ApplyMapping.apply(frame=Join_node1736449634945, mappings=[("DataReferenciaCarteira", "string", "DataReferenciaCarteira", "string"), ("`count(DISTINCT cod_empresa)`", "long", "ContagemEmpresas", "long"), ("right_QtdTeoricaTotal", "string", "QtdTeoricaTotal", "string"), ("`sum(val_participacao_setor)`", "double", "SomaParticipacaoSetor", "string"), ("NomeAcao", "string", "NomeAcao", "string")], transformation_ctx="ChangeSchema_node1736451072089")
+ChangeSchema_node1736451072089 = ApplyMapping.apply(frame=Join_node1736449634945, mappings=[("NomeAcao", "string", "NomeAcao", "string"), ("dt_referencia_carteira", "string", "DataReferenciaCarteira", "string"), ("`sum(val_participacao_setor)`", "double", "SomaParticipacaoSetor", "string"), ("`count(cod_empresa)`", "long", "`count(cod_empresa)`", "long"), ("right_qtd_teorica_total", "string", "QtdTeoricaTotal", "string")], transformation_ctx="ChangeSchema_node1736451072089")
 
 # Script generated for node Custom Transform
 CustomTransform_node1736384318504 = MyTransform(glueContext, DynamicFrameCollection({"ChangeSchema_node1736451072089": ChangeSchema_node1736451072089}, glueContext))
