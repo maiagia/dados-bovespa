@@ -1,0 +1,649 @@
+{
+	"jobConfig": {
+		"name": "etl-transformacao-dados-bovespa",
+		"description": "",
+		"role": "arn:aws:iam::557690586299:role/GlueJobExecutionRole",
+		"command": "glueetl",
+		"version": "5.0",
+		"runtime": null,
+		"workerType": "G.1X",
+		"numberOfWorkers": 2,
+		"maxCapacity": 2,
+		"jobRunQueuingEnabled": false,
+		"maxRetries": 0,
+		"timeout": 480,
+		"maxConcurrentRuns": 1,
+		"security": "none",
+		"scriptName": "etl-transformacao-dados-bovespa.py",
+		"scriptLocation": "s3://aws-glue-assets-557690586299-us-east-1/scripts/",
+		"language": "python-3",
+		"spark": true,
+		"sparkConfiguration": "standard",
+		"jobParameters": [],
+		"tags": [],
+		"jobMode": "VISUAL_MODE",
+		"createdOn": "2025-01-08T02:39:35.120Z",
+		"developerMode": false,
+		"connectionsList": [],
+		"temporaryDirectory": "s3://aws-glue-assets-557690586299-us-east-1/temporary/",
+		"logging": true,
+		"glueHiveMetastore": true,
+		"etlAutoTuning": false,
+		"metrics": true,
+		"observabilityMetrics": true,
+		"bookmark": "job-bookmark-disable",
+		"sparkPath": "s3://aws-glue-assets-557690586299-us-east-1/sparkHistoryLogs/",
+		"flexExecution": false,
+		"minFlexWorkers": null,
+		"maintenanceWindow": null
+	},
+	"dag": {
+		"node-1736387675044": {
+			"nodeId": "node-1736387675044",
+			"dataPreview": false,
+			"previewAmount": 0,
+			"inputs": [
+				"node-1736385595940"
+			],
+			"name": "Amazon S3",
+			"generatedNodeName": "AmazonS3_node1736387675044",
+			"classification": "DataSink",
+			"type": "S3",
+			"streamingBatchInterval": 100,
+			"format": "glueparquet",
+			"compression": "snappy",
+			"path": "s3://refined-bovespa/tb_transformacao_dados_bovespa/",
+			"partitionKeys": [
+				"DataReferenciaCarteira",
+				"NomeAcao"
+			],
+			"schemaChangePolicy": {
+				"enableUpdateCatalog": true,
+				"updateBehavior": "UPDATE_IN_DATABASE",
+				"database": "default",
+				"table": "tb_transformacao_dados_bovespa"
+			},
+			"updateCatalogOptions": "schemaAndPartitions",
+			"autoDataQuality": {
+				"isEnabled": false,
+				"evaluationContext": "EvaluateDataQuality_node1736387442727"
+			},
+			"calculatedType": "",
+			"codeGenVersion": 2
+		},
+		"node-1736384274380": {
+			"nodeId": "node-1736384274380",
+			"dataPreview": false,
+			"previewAmount": 0,
+			"inputs": [
+				"node-1736304019816"
+			],
+			"name": "Change Schema",
+			"generatedNodeName": "ChangeSchema_node1736384274380",
+			"classification": "Transform",
+			"type": "ApplyMapping",
+			"mapping": [
+				{
+					"toKey": "nme_setor",
+					"fromPath": [
+						"nme_setor"
+					],
+					"toType": "string",
+					"fromType": "string",
+					"dropped": false,
+					"children": null
+				},
+				{
+					"toKey": "cod_empresa",
+					"fromPath": [
+						"cod_empresa"
+					],
+					"toType": "string",
+					"fromType": "string",
+					"dropped": false,
+					"children": null
+				},
+				{
+					"toKey": "NomeAcao",
+					"fromPath": [
+						"nme_acao"
+					],
+					"toType": "string",
+					"fromType": "string",
+					"dropped": false,
+					"children": null
+				},
+				{
+					"toKey": "dsc_tipo",
+					"fromPath": [
+						"dsc_tipo"
+					],
+					"toType": "string",
+					"fromType": "string",
+					"dropped": false,
+					"children": null
+				},
+				{
+					"toKey": "val_participacao_setor",
+					"fromPath": [
+						"val_participacao_setor"
+					],
+					"toType": "double",
+					"fromType": "double",
+					"dropped": false,
+					"children": null
+				},
+				{
+					"toKey": "val_participacao_acumulada_setor",
+					"fromPath": [
+						"val_participacao_acumulada_setor"
+					],
+					"toType": "string",
+					"fromType": "double",
+					"dropped": false,
+					"children": null
+				},
+				{
+					"toKey": "qtd_teorica",
+					"fromPath": [
+						"qtd_teorica"
+					],
+					"toType": "string",
+					"fromType": "double",
+					"dropped": false,
+					"children": null
+				},
+				{
+					"toKey": "dt_referencia_carteira",
+					"fromPath": [
+						"dt_referencia_carteira"
+					],
+					"toType": "string",
+					"fromType": "bigint",
+					"dropped": false
+				},
+				{
+					"toKey": "qtd_teorica_total",
+					"fromPath": [
+						"qtd_teorica_total"
+					],
+					"toType": "string",
+					"fromType": "double",
+					"dropped": false,
+					"children": null
+				},
+				{
+					"toKey": "qtd_redutor",
+					"fromPath": [
+						"qtd_redutor"
+					],
+					"toType": "string",
+					"fromType": "double",
+					"dropped": false,
+					"children": null
+				},
+				{
+					"toKey": "dt_extracao",
+					"fromPath": [
+						"dt_extracao"
+					],
+					"toType": "timestamp",
+					"fromType": "string",
+					"dropped": false,
+					"children": null
+				}
+			],
+			"parentsValid": true,
+			"calculatedType": "",
+			"codeGenVersion": 2
+		},
+		"node-1736819163285": {
+			"nodeId": "node-1736819163285",
+			"dataPreview": false,
+			"previewAmount": 0,
+			"inputs": [
+				"node-1736449430913"
+			],
+			"name": "Renamed keys for Join",
+			"generatedNodeName": "RenamedkeysforJoin_node1736819163285",
+			"classification": "Transform",
+			"type": "ApplyMapping",
+			"mapping": [
+				{
+					"toKey": "right_NomeAcao",
+					"fromPath": [
+						"NomeAcao"
+					],
+					"toType": "string",
+					"fromType": "string",
+					"dropped": false,
+					"children": null
+				},
+				{
+					"toKey": "right_dt_referencia_carteira",
+					"fromPath": [
+						"dt_referencia_carteira"
+					],
+					"toType": "string",
+					"fromType": "string",
+					"dropped": false,
+					"children": null
+				},
+				{
+					"toKey": "right_qtd_teorica_total",
+					"fromPath": [
+						"qtd_teorica_total"
+					],
+					"toType": "string",
+					"fromType": "string",
+					"dropped": false,
+					"children": null
+				}
+			],
+			"parentsValid": true,
+			"calculatedType": "",
+			"codeGenVersion": 2
+		},
+		"node-1736385595940": {
+			"nodeId": "node-1736385595940",
+			"dataPreview": false,
+			"previewAmount": 0,
+			"inputs": [
+				"node-1736384318504"
+			],
+			"name": "Select From Collection",
+			"generatedNodeName": "SelectFromCollection_node1736385595940",
+			"classification": "Transform",
+			"type": "SelectFromCollection",
+			"index": 0,
+			"parentsValid": true,
+			"calculatedType": "",
+			"codeGenVersion": 2
+		},
+		"node-1736449634945": {
+			"nodeId": "node-1736449634945",
+			"dataPreview": false,
+			"previewAmount": 0,
+			"inputs": [
+				"node-1736383572625",
+				"node-1736819163285"
+			],
+			"name": "Join",
+			"generatedNodeName": "Join_node1736449634945",
+			"classification": "Transform",
+			"type": "Join",
+			"joinType": "equijoin",
+			"columns": [
+				{
+					"from": "node-1736383572625",
+					"keys": [
+						"NomeAcao",
+						"dt_referencia_carteira"
+					]
+				},
+				{
+					"from": "node-1736819163285",
+					"keys": [
+						"right_NomeAcao",
+						"right_dt_referencia_carteira"
+					]
+				}
+			],
+			"columnConditions": [
+				"=",
+				"="
+			],
+			"parentsValid": true,
+			"calculatedType": "",
+			"codeGenVersion": 2
+		},
+		"node-1736304019816": {
+			"nodeId": "node-1736304019816",
+			"dataPreview": false,
+			"previewAmount": 0,
+			"inputs": [],
+			"name": "Amazon S3",
+			"generatedNodeName": "AmazonS3_node1736304019816",
+			"classification": "DataSource",
+			"type": "S3",
+			"isCatalog": false,
+			"format": "parquet",
+			"paths": [
+				"s3://stage-dados-brutos/ano=2025/"
+			],
+			"compressionType": null,
+			"exclusions": [],
+			"groupFiles": null,
+			"groupSize": null,
+			"recurse": true,
+			"maxBand": null,
+			"maxFilesInBand": null,
+			"additionalOptions": {
+				"boundedSize": null,
+				"boundedFiles": null,
+				"enableSamplePath": false,
+				"samplePath": "s3://stage-dados-brutos/ano=2025/mes=01/dia=04/Empresas_IBOV_20250106_20250104.parquet",
+				"boundedOption": null
+			},
+			"outputSchemas": [
+				[
+					{
+						"key": "nme_setor",
+						"fullPath": [
+							"nme_setor"
+						],
+						"type": "string",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "cod_empresa",
+						"fullPath": [
+							"cod_empresa"
+						],
+						"type": "string",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "nme_acao",
+						"fullPath": [
+							"nme_acao"
+						],
+						"type": "string",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "dsc_tipo",
+						"fullPath": [
+							"dsc_tipo"
+						],
+						"type": "string",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "val_participacao_setor",
+						"fullPath": [
+							"val_participacao_setor"
+						],
+						"type": "double",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "val_participacao_acumulada_setor",
+						"fullPath": [
+							"val_participacao_acumulada_setor"
+						],
+						"type": "double",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "qtd_teorica",
+						"fullPath": [
+							"qtd_teorica"
+						],
+						"type": "double",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "dt_referencia_carteira",
+						"fullPath": [
+							"dt_referencia_carteira"
+						],
+						"type": "bigint",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "qtd_teorica_total",
+						"fullPath": [
+							"qtd_teorica_total"
+						],
+						"type": "double",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "qtd_redutor",
+						"fullPath": [
+							"qtd_redutor"
+						],
+						"type": "double",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "dt_extracao",
+						"fullPath": [
+							"dt_extracao"
+						],
+						"type": "string",
+						"glueStudioType": null,
+						"children": null
+					}
+				]
+			],
+			"calculatedType": "",
+			"codeGenVersion": 2
+		},
+		"node-1736383572625": {
+			"nodeId": "node-1736383572625",
+			"dataPreview": false,
+			"previewAmount": 0,
+			"inputs": [
+				"node-1736384274380"
+			],
+			"name": "Aggregate",
+			"generatedNodeName": "Aggregate_node1736383572625",
+			"classification": "Transform",
+			"type": "Aggregate",
+			"parentsValid": true,
+			"calculatedType": "",
+			"groups": [
+				"NomeAcao",
+				"dt_referencia_carteira"
+			],
+			"aggs": [
+				{
+					"column": "val_participacao_setor",
+					"aggFunc": "sum"
+				},
+				{
+					"column": "cod_empresa",
+					"aggFunc": "countDistinct"
+				}
+			],
+			"codeGenVersion": 2
+		},
+		"node-1736451072089": {
+			"nodeId": "node-1736451072089",
+			"dataPreview": false,
+			"previewAmount": 0,
+			"inputs": [
+				"node-1736449634945"
+			],
+			"name": "Change Schema",
+			"generatedNodeName": "ChangeSchema_node1736451072089",
+			"classification": "Transform",
+			"type": "ApplyMapping",
+			"mapping": [
+				{
+					"toKey": "NomeAcao",
+					"fromPath": [
+						"NomeAcao"
+					],
+					"toType": "string",
+					"fromType": "string",
+					"dropped": false,
+					"children": null
+				},
+				{
+					"toKey": "DataReferenciaCarteira",
+					"fromPath": [
+						"dt_referencia_carteira"
+					],
+					"toType": "string",
+					"fromType": "string",
+					"dropped": false,
+					"children": null
+				},
+				{
+					"toKey": "SomaParticipacaoSetor",
+					"fromPath": [
+						"sum(val_participacao_setor)"
+					],
+					"toType": "string",
+					"fromType": "double",
+					"dropped": false,
+					"children": null
+				},
+				{
+					"toKey": "count(cod_empresa)",
+					"fromPath": [
+						"count(cod_empresa)"
+					],
+					"toType": "long",
+					"fromType": "long",
+					"dropped": false
+				},
+				{
+					"toKey": "right_NomeAcao",
+					"fromPath": [
+						"right_NomeAcao"
+					],
+					"toType": "string",
+					"fromType": "string",
+					"dropped": true,
+					"children": null
+				},
+				{
+					"toKey": "right_dt_referencia_carteira",
+					"fromPath": [
+						"right_dt_referencia_carteira"
+					],
+					"toType": "string",
+					"fromType": "string",
+					"dropped": true,
+					"children": null
+				},
+				{
+					"toKey": "QtdTeoricaTotal",
+					"fromPath": [
+						"right_qtd_teorica_total"
+					],
+					"toType": "string",
+					"fromType": "string",
+					"dropped": false,
+					"children": null
+				}
+			],
+			"parentsValid": true,
+			"calculatedType": "",
+			"codeGenVersion": 2
+		},
+		"node-1736384318504": {
+			"nodeId": "node-1736384318504",
+			"dataPreview": false,
+			"previewAmount": 0,
+			"inputs": [
+				"node-1736451072089"
+			],
+			"name": "Custom Transform",
+			"generatedNodeName": "CustomTransform_node1736384318504",
+			"classification": "Transform",
+			"type": "CustomCode",
+			"code": "# Importando as bibliotecas necessárias dentro da função\nfrom pyspark.sql.functions import col, datediff, to_date, current_date\nfrom awsglue.dynamicframe import DynamicFrame\n\n# Configura o Spark para usar o parser de data legado\nglueContext.spark_session.conf.set(\"spark.sql.legacy.timeParserPolicy\", \"LEGACY\")\n\n# Acessa o DynamicFrame específico dentro do DynamicFrameCollection\ndynamic_frame = dfc[\"ChangeSchema_node1736451072089\"]\n\n# Converte o DynamicFrame para DataFrame para usar as funções Spark\ndf = dynamic_frame.toDF()\n\n# Converte as colunas para 'timestamp' (se necessário)\ndf = df.withColumn(\n    \"DataReferenciaCarteira\", \n    to_date(col(\"DataReferenciaCarteira\"), \"yyyyMMdd\")  # Converte 'DataReferenciaCarteira' para tipo Date\n)\n\n# Calcula a diferença entre a data atual e a coluna 'DataReferenciaCarteira'\ndf = df.withColumn(\n    \"DiferencaDias\", \n    datediff(current_date(), col(\"DataReferenciaCarteira\"))\n)\n\n# Substitui valores nulos por 0\ndf = df.fillna({\"DiferencaDias\": 0})\n\n# Reorganiza as colunas para a ordem desejada\ndf = df.select(\n    \"NomeAcao\", \n    \"DataReferenciaCarteira\", \n    \"QtdTeoricaTotal\", \n    \"DiferencaDias\", \n    \"SomaParticipacaoSetor\", \n    \"ContagemEmpresas\"\n)\n\n# Converte o DataFrame de volta para DynamicFrame\ntransformed_dynamic_frame = DynamicFrame.fromDF(df, glueContext, \"transformed_dynamic_frame\")\n\n# Retorna o DynamicFrame dentro de um DynamicFrameCollection\nreturn DynamicFrameCollection({\"transformed_dynamic_frame\": transformed_dynamic_frame}, glueContext)\n\n",
+			"className": "MyTransform",
+			"outputSchemas": [
+				[
+					{
+						"key": "NomeAcao",
+						"fullPath": [
+							"NomeAcao"
+						],
+						"type": "string",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "DataReferenciaCarteira",
+						"fullPath": [
+							"DataReferenciaCarteira"
+						],
+						"type": "date",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "QtdTeoricaTotal",
+						"fullPath": [
+							"QtdTeoricaTotal"
+						],
+						"type": "string",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "DiferencaDias",
+						"fullPath": [
+							"DiferencaDias"
+						],
+						"type": "int",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "SomaParticipacaoSetor",
+						"fullPath": [
+							"SomaParticipacaoSetor"
+						],
+						"type": "string",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "ContagemEmpresas",
+						"fullPath": [
+							"ContagemEmpresas"
+						],
+						"type": "bigint",
+						"glueStudioType": null,
+						"children": null
+					}
+				]
+			],
+			"parentsValid": true,
+			"calculatedType": "",
+			"codeGenVersion": 2
+		},
+		"node-1736449430913": {
+			"nodeId": "node-1736449430913",
+			"dataPreview": false,
+			"previewAmount": 0,
+			"inputs": [
+				"node-1736384274380"
+			],
+			"name": "Select Fields",
+			"generatedNodeName": "SelectFields_node1736449430913",
+			"classification": "Transform",
+			"type": "SelectFields",
+			"paths": [
+				"QtdTeoricaTotal",
+				"NomeAcao",
+				"DataReferenciaCarteira",
+				"dt_referencia_carteira",
+				"qtd_teorica_total"
+			],
+			"parentsValid": true,
+			"calculatedType": "",
+			"codeGenVersion": 2
+		}
+	},
+	"hasBeenSaved": false,
+	"usageProfileName": null
+}
