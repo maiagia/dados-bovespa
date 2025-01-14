@@ -37,19 +37,55 @@ A arquitetura do pipeline segue o seguinte fluxo:
 3. **Lambda para Acionar Glue**:
    - A Lambda aciona automaticamente o job de ETL no Glue sempre que novos dados são enviados para o bucket S3.
 
-4. **Transformações no Glue**:
-   - **Agrupamento numérico**: Sumarização, contagem ou soma.
-   - **Renomeação de colunas**: Duas colunas são renomeadas.
-   - **Cálculo de datas**: Realiza cálculo como diferença entre datas.
+4. ## Transformações no Glue
 
-5. **Salvamento de Dados Refinados**:
-   - Os dados refinados são armazenados em Parquet, particionados por data e nome/abreviação da ação.
+### **Agrupamento numérico, sumarização e contagem (5A):**
+- **Realizado no nó:** `Aggregate_node1736383572625`.
+- **Operações executadas:**
+  - **Sumarização:** Soma da coluna `val_participacao_setor`.
+  - **Contagem:** Contagem distinta de `cod_empresa`.
+- ✅ **Cumpre o requisito.**
 
-6. **Glue Catalog**:
-   - O job Glue automaticamente catalogará os dados no Glue Catalog.
+---
 
-7. **Consultas e Visualizações no Athena**:
-   - Após o processamento, os dados estarão disponíveis no Athena para consultas SQL.
+### **Renomear colunas (5B):**
+- **Realizado no nó:** `ChangeSchema_node1736384274380`.
+- **Colunas renomeadas:**
+  - `nme_acao` → `NomeAcao`.
+  - `dt_referencia_carteira` → `DataReferenciaCarteira`.
+- ✅ **Cumpre o requisito.**
+
+---
+
+### **Cálculo com campos de data (5C):**
+- **Realizado na função:** `MyTransform`.
+- **Descrição:**
+  - Calcula a diferença de dias entre a data atual (`current_date()`) e a coluna `DataReferenciaCarteira`.
+  - O resultado é armazenado na coluna `DiferencaDias`.
+- ✅ **Cumpre o requisito.**
+
+---
+
+## Salvar os dados refinados no S3 particionados por data e nome da ação (R6):
+- **Local de salvamento:** `s3://refined-bovespa/tb_transformacao_dados_bovespa/`.
+- **Partições:** `DataReferenciaCarteira` e `NomeAcao`.
+- ✅ **Cumpre totalmente.**
+
+---
+
+## Catalogar dados no Glue Catalog (R7):
+- **Descrição:**
+  - O código utiliza `setCatalogInfo` para registrar os dados no Glue Catalog.
+  - Cria uma tabela no banco de dados default do Glue Catalog.
+- ✅ **Cumpre totalmente.**
+
+---
+
+## Disponibilizar dados no Athena (R8):
+- **Descrição:**
+  - Como os dados são catalogados automaticamente, eles estão disponíveis no Athena.
+- ✅ **Cumpre totalmente.**
+
 
 ### Estrutura do Código
 
