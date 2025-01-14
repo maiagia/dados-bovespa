@@ -33,15 +33,16 @@ A arquitetura do pipeline segue o seguinte fluxo:
 ## Requisitos Atendidos
 
 ### 1. **Scrap de Dados do Site da B3**
-- A função Lambda extrai os dados diretamente do site da B3 e os envia ao bucket S3 de dados brutos.
+- A função Lambda extrai os dados diretamente do site da B3 e os envia ao bucket S3 de dados brutos. `Lambda request-ibov`
 
 ### 2. **Ingestão de Dados no S3**
 - Os dados são armazenados em S3 no formato **Parquet**, organizados em partições diárias.
 
 ### 3. **Trigger Lambda**
-- A Lambda monitora o bucket de dados brutos e aciona o job Glue automaticamente quando novos arquivos são carregados.
+- A Lambda monitora o bucket de dados brutos e aciona o job Glue automaticamente quando novos arquivos são carregados. `Lambda triggerGlueBovespa`
 
 ### 4. **Transformações no Glue**
+`etl-transformacao-dados-bovespa`.
 
 #### **Agrupamento numérico, sumarização e contagem (5A):**
 - **Nó usado:** `Aggregate_node1736383572625`.
