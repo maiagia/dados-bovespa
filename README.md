@@ -93,7 +93,7 @@ A arquitetura do pipeline segue o seguinte fluxo:
 
 O job de transformação ETL foi desenvolvido utilizando o AWS Glue, com as seguintes etapas:
 
-- **Leitura de Dados do S3**: Dados brutos são lidos de um bucket S3 utilizando o formato CSV.
+- **Leitura de Dados do S3**: Dados brutos são lidos de um bucket S3 utilizando o formato parquet.
 - **Transformação dos Dados**:
   - **Mudança de esquema**: As colunas do DataFrame são renomeadas e ajustadas.
   - **Agregação**: Realiza agrupamento de dados por nome da ação e data de referência da carteira.
