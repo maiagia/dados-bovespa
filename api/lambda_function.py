@@ -51,7 +51,7 @@ def lambda_handler(event, context):
         return vDataFrame_Buffer
 
 
-    def exportarParaBucketS3(pDataFrameIO: io.BytesIO, pEndpoint: str, pId: str, pSenha: str, pRegiao: str, pBucket: str, pNomeArquivoNoBucket: str, pLocalExecucao: int = 0):
+    def exportarParaBucketS3(pDataFrameIO: io.BytesIO, pEndpoint: str, pId: str, pSenha: str, pRegiao: str, pBucket: str, pNomeArquivoNoBucket: str, pLocalExecucao: int = 0, pDiretorio: str = ''):
 
         # Quando pLocalExecucao = 0, LocalStack
         # Quando pLocalExecucao = 1, AWS Lambda
@@ -60,7 +60,10 @@ def lambda_handler(event, context):
         else:
             vCliente_S3 = boto3.client('s3')
 
-        vCliente_S3.upload_fileobj(pDataFrameIO, pBucket, pNomeArquivoNoBucket)
+        if pDiretorio != '':
+            vCliente_S3.put_object(Bucket=pBucket, Key=pDiretorio)
+            
+        vCliente_S3.upload_fileobj(pDataFrameIO, pBucket, '/'.join([pDiretorio, pNomeArquivoNoBucket]))
 
 
     # Pegar empresas via API
@@ -121,7 +124,8 @@ def lambda_handler(event, context):
             pBucket = 'stage-dados-brutos',
             pRegiao = 'us-east-1',
             pNomeArquivoNoBucket = vNomeArquivo,
-            pLocalExecucao = 1
+            pLocalExecucao = 1,
+            pDiretorio= vBase['DT_EXTRACAO'].max().strftime('ano=%Y/mes=%m/dia=%d')
             )
         
     return {"statusCode": 200, "body": f"Arquivo '{vNomeArquivo}' enviado com sucesso!"}
