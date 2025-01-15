@@ -27,6 +27,7 @@ A arquitetura do pipeline segue o seguinte fluxo:
 5. **Bucket S3 (Dados Refinados)**: Os dados transformados são salvos em formato **Parquet**, particionados por data e nome da ação.  
 6. **Glue Catalog**: Os metadados dos dados refinados são automaticamente catalogados no Glue, criando uma tabela no banco de dados padrão.  
 7. **Athena**: Permite consultas SQL interativas e análises dos dados catalogados.
+8. **Notebook**: Oferece uma interface interativa para executar consultas SQL diretamente nos dados catalogados no Glue, permitindo análises exploratórias, visualização de resultados e criação de relatórios de forma prática, sem necessidade de ferramentas externas. 
 
 ---
 
@@ -69,6 +70,9 @@ A arquitetura do pipeline segue o seguinte fluxo:
 
 ### 7. **Disponibilizar Dados no Athena**
 - Como os dados são catalogados automaticamente, eles ficam disponíveis para consultas SQL no Athena.
+
+### 8. **Criação do Notebook no Athena**
+- No notebook, inclua o código necessário para manipulação de dados e análises adicionais.
 
 ---
 
