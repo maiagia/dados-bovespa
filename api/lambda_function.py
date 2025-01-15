@@ -9,7 +9,6 @@ from datetime import datetime
 import boto3
 import io
 
-
 def lambda_handler(event, context):
     u = MLET3()
 
@@ -17,13 +16,10 @@ def lambda_handler(event, context):
     def payload_2_base64(pPayload_Dict) -> base64.b64encode:
         vPayload_Json = json.dumps(pPayload_Dict)
         vPayload_base64 = base64.b64encode(vPayload_Json.encode()).decode()
-
         return vPayload_base64
 
-
-    # Requisicao para API IBOV
+    # Requisição para API IBOV
     def empresas_IBOV(pLink_API: str = LINK_API_IBOV, pNumeroPagina: int = 1, pQtd_Itens_Pagina: int = 100, pSegmentoEmpresas: int = SEGMENTO_CONSULTAR_POR_CODIGO) -> tuple:
-        
         # Payload
         vPayload = {
             'language': 'pt-br',
@@ -32,36 +28,29 @@ def lambda_handler(event, context):
             'index': 'IBOV',
             'segment': pSegmentoEmpresas
         }
-
         vLinkAPI = ''.join([pLink_API, payload_2_base64(vPayload)])
-
         vRequisicao = requests.get(vLinkAPI)
         vCabecalho_Json = vRequisicao.json().get("header", [])
         vEmpresas_Json = vRequisicao.json().get("results", [])
         vTotalPaginas = vRequisicao.json()['page']['totalPages']
-
         return (vTotalPaginas, vCabecalho_Json, vEmpresas_Json)
 
-
+    # Converter DataFrame para parquet em memória
     def converterDataFrame_Parquet_Memoria(pDataFrame: pd.DataFrame) -> io.BytesIO:
-
         vDataFrame_Buffer = io.BytesIO()
         pDataFrame.to_parquet(vDataFrame_Buffer, index=False)
         vDataFrame_Buffer.seek(0)
         return vDataFrame_Buffer
 
-
+    # Exportar para bucket S3
     def exportarParaBucketS3(pDataFrameIO: io.BytesIO, pEndpoint: str, pId: str, pSenha: str, pRegiao: str, pBucket: str, pNomeArquivoNoBucket: str, pLocalExecucao: int = 0):
-
         # Quando pLocalExecucao = 0, LocalStack
         # Quando pLocalExecucao = 1, AWS Lambda
         if pLocalExecucao == 0:
             vCliente_S3 = boto3.client('s3', endpoint_url=pEndpoint, aws_access_key_id=pId, aws_secret_access_key=pSenha, region_name=pRegiao)
         else:
             vCliente_S3 = boto3.client('s3')
-
         vCliente_S3.upload_fileobj(pDataFrameIO, pBucket, pNomeArquivoNoBucket)
-
 
     # Pegar empresas via API
     vListaEmpresas_Json = []
@@ -69,18 +58,14 @@ def lambda_handler(event, context):
     vTotalPaginas = 1
 
     while vContadorPagina <= vTotalPaginas:
-
         vResultadoEmpresas = empresas_IBOV(pNumeroPagina=vContadorPagina, pQtd_Itens_Pagina=100, pSegmentoEmpresas=SEGMENTO_CONSULTAR_POR_SETOR_ATUACAO)
         vTotalPaginas = vResultadoEmpresas[0]
         vCabecalhoEmpresas_Json = vResultadoEmpresas[1]
         vListaEmpresas_Json.extend(vResultadoEmpresas[2])
-
         vContadorPagina += 1
-
 
     # DataFrame
     if vListaEmpresas_Json:
-
         # Converter a lista em DataFrame
         vBase = pd.DataFrame(vListaEmpresas_Json)
 
@@ -100,7 +85,6 @@ def lambda_handler(event, context):
             'partAcum': 'val_participacao_acumulada_setor',
             'theoricalQty': 'qtd_teorica'
         }, inplace=True)
-
         vBase.columns = [u.normalizarTexto(i) for i in vBase.columns]
 
         # Converter colunas
@@ -109,19 +93,24 @@ def lambda_handler(event, context):
         # Remover excesso de espaços
         vBase = vBase.apply(lambda x: x.str.replace(r'\s+', ' ', regex=True).str.strip() if x.dtypes == 'object' else x)
 
-        # Exportar
-        vNomeArquivo = f"Empresas_IBOV_{vBase['DT_REFERENCIA_CARTEIRA'].max()}_{vBase['DT_EXTRACAO'].max().strftime('%Y%m%d')}.parquet"
-        # vBase.to_csv(f'001_Arquivos_Gerados\Empresas_IBOV_{vBase['DT_REFERENCIA_CARTEIRA'].max()}_{vBase['DT_EXTRACAO'].max().strftime('%Y%m%d')}.csv', index=False)
-        # vBase.to_parquet(f'001_Arquivos_Gerados\Empresas_IBOV_{vBase['DT_REFERENCIA_CARTEIRA'].max()}_{vBase['DT_EXTRACAO'].max().strftime('%Y%m%d')}.parquet')
+        # Extraindo ano, mês e dia da data de extração
+        ano = vBase['DT_EXTRACAO'].max().year
+        mes = vBase['DT_EXTRACAO'].max().month
+        dia = vBase['DT_EXTRACAO'].max().day
+
+        # Definindo o caminho particionado no S3
+        vNomeArquivo = f"{ano}/{mes:02}/{dia:02}/Empresas_IBOV_{vBase['DT_REFERENCIA_CARTEIRA'].max()}_{vBase['DT_EXTRACAO'].max().strftime('%Y%m%d')}.parquet"
+
+        # Exportar para o S3
         exportarParaBucketS3(
-            pDataFrameIO = converterDataFrame_Parquet_Memoria(vBase),
-            pEndpoint = r'http://localhost:4566',
-            pId = None,
-            pSenha = None,
-            pBucket = 'stage-dados-brutos',
-            pRegiao = 'us-east-1',
-            pNomeArquivoNoBucket = vNomeArquivo,
-            pLocalExecucao = 1
-            )
-        
+            pDataFrameIO=converterDataFrame_Parquet_Memoria(vBase),
+            pEndpoint='http://localhost:4566',
+            pId=None,
+            pSenha=None,
+            pBucket='stage-dados-brutos',
+            pRegiao='us-east-1',
+            pNomeArquivoNoBucket=vNomeArquivo,
+            pLocalExecucao=1
+        )
+
     return {"statusCode": 200, "body": f"Arquivo '{vNomeArquivo}' enviado com sucesso!"}
