@@ -88,6 +88,10 @@ O job foi desenvolvido no AWS Glue Studio e realiza as seguintes operações:
   - Calcula diferenças entre datas.
 - **Escrita dos Dados**: Salva os dados transformados em formato **Parquet** no S3, particionados por data e nome da ação.
 - **Catalogação**: Atualiza automaticamente o Glue Catalog com os metadados dos dados refinados.
+Exemplo do código do ETL:
+```python
+
+```
 
 ### **Lambda para Acionar o Glue**
 A função Lambda é responsável por iniciar o job Glue automaticamente quando novos arquivos são carregados no bucket S3.
