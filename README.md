@@ -107,8 +107,7 @@ def lambda_handler(event, context):
 ```
 
 ### **Lambda para Extração de Empresas IBOV**
-A função Lambda coleta dados de empresas listadas no índice IBOV, processa as informações e exporta os dados como arquivos Parquet para o S3.  
-
+A função Lambda coleta dados de empresas listadas no índice IBOV, processa as informações e exporta os dados como arquivos Parquet para o S3 em partições diárias.  
 Exemplo do código da Lambda:
 ```python
 import requests
