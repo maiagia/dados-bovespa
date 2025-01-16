@@ -44,13 +44,16 @@ def lambda_handler(event, context):
 
     # Exportar para bucket S3
     def exportarParaBucketS3(pDataFrameIO: io.BytesIO, pEndpoint: str, pId: str, pSenha: str, pRegiao: str, pBucket: str, pNomeArquivoNoBucket: str, pLocalExecucao: int = 0):
+
         # Quando pLocalExecucao = 0, LocalStack
         # Quando pLocalExecucao = 1, AWS Lambda
         if pLocalExecucao == 0:
             vCliente_S3 = boto3.client('s3', endpoint_url=pEndpoint, aws_access_key_id=pId, aws_secret_access_key=pSenha, region_name=pRegiao)
         else:
             vCliente_S3 = boto3.client('s3')
+
         vCliente_S3.upload_fileobj(pDataFrameIO, pBucket, pNomeArquivoNoBucket)
+
 
     # Pegar empresas via API
     vListaEmpresas_Json = []
@@ -103,14 +106,16 @@ def lambda_handler(event, context):
 
         # Exportar para o S3
         exportarParaBucketS3(
-            pDataFrameIO=converterDataFrame_Parquet_Memoria(vBase),
-            pEndpoint='http://localhost:4566',
-            pId=None,
-            pSenha=None,
-            pBucket='stage-dados-brutos',
-            pRegiao='us-east-1',
-            pNomeArquivoNoBucket=vNomeArquivo,
-            pLocalExecucao=1
-        )
-
+            pDataFrameIO = converterDataFrame_Parquet_Memoria(vBase),
+            pEndpoint = r'http://localhost:4566',
+            pId = None,
+            pSenha = None,
+            pBucket = 'stage-dados-brutos',
+            pRegiao = 'us-east-1',
+            pNomeArquivoNoBucket = vNomeArquivo,
+            pLocalExecucao = 1,
+            pDiretorio= vBase['DT_EXTRACAO'].max().strftime('ano=%Y/mes=%m/dia=%d')
+            )
+        
     return {"statusCode": 200, "body": f"Arquivo '{vNomeArquivo}' enviado com sucesso!"}
+
