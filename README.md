@@ -18,16 +18,17 @@ A arquitetura do pipeline segue o seguinte fluxo:
 
 
 1. **Scrap de Dados (Lambda)**: A função Lambda extrai dados do site da B3 e os envia para o bucket S3 de dados brutos.  
-2. **Bucket S3 (Dados Brutos)**: Armazena os dados brutos em formato CSV, particionados diariamente.  
+2. **Bucket S3 (Dados Brutos)**: Armazena os dados brutos em formato parquet, particionados diariamente.  
 3. **Trigger Lambda**: Quando novos arquivos são carregados no S3, uma trigger Lambda inicia o job Glue.  
 4. **ETL no Glue**: O job Glue realiza transformações nos dados, como:
    - Agrupamento, sumarização e contagem.
    - Renomeação de colunas.
    - Cálculo da diferença entre datas.
-5. **Bucket S3 (Dados Refinados)**: Os dados transformados são salvos em formato **Parquet**, particionados por data e nome da ação.  
-6. **Glue Catalog**: Os metadados dos dados refinados são automaticamente catalogados no Glue, criando uma tabela no banco de dados padrão.  
-7. **Athena**: Permite consultas SQL interativas e análises dos dados catalogados.
-8. **Notebook**: Oferece uma interface interativa para executar consultas SQL diretamente nos dados catalogados no Glue, permitindo análises exploratórias, visualização de resultados e criação de relatórios de forma prática, sem necessidade de ferramentas externas. 
+5. **Bucket S3 (Dados Refinados)**: Os dados transformados são salvos em formato **Parquet**, particionados por data e nome da ação.
+   * O nome do bucket deve ser único na aws devido a isso, foi nomeado de refined-bovespa.  
+7. **Glue Catalog**: Os metadados dos dados refinados são automaticamente catalogados no Glue, criando uma tabela no banco de dados padrão.  
+8. **Athena**: Permite consultas SQL interativas e análises dos dados catalogados.
+9. **Notebook**: Oferece uma interface interativa para executar consultas SQL diretamente nos dados catalogados no Glue, permitindo análises exploratórias, visualização de resultados e criação de relatórios de forma prática, sem necessidade de ferramentas externas. 
 
 ---
 
