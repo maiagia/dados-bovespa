@@ -5,7 +5,7 @@
 - Kleryton de Souza Maria  
 - Lucas Paim de Paula  
 - Maiara Giavoni  
-- Rafael Tafelli dos Santos  
+- Rafael Tafelli dos Santos 
 
 ## Descrição do Projeto
 Este projeto implementa um pipeline de dados completo para extrair, processar e analisar dados do pregão da B3 utilizando serviços da AWS, como **S3**, **Glue**, **Lambda** e **Athena**. O objetivo é automatizar a ingestão, transformação e análise de dados históricos do mercado de ações da B3.
