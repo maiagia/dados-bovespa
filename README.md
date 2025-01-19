@@ -11,9 +11,6 @@
 Este projeto implementa um pipeline de dados completo para extrair, processar e analisar dados do pregão da B3 utilizando serviços da AWS, como **S3**, **Glue**, **Lambda** e **Athena**. O objetivo é automatizar a ingestão, transformação e análise de dados históricos do mercado de ações da B3.
 ---
 
-https://github.com/user-attachments/assets/bb33616e-59fe-4b5f-9fba-3268934802d8
-
-
 ## Arquitetura
 A arquitetura do pipeline segue o seguinte fluxo:
 
