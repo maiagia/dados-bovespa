@@ -17,8 +17,7 @@ https://github.com/user-attachments/assets/bb33616e-59fe-4b5f-9fba-3268934802d8
 ## Arquitetura
 A arquitetura do pipeline segue o seguinte fluxo:
 
-![401786235-579b8781-1676-4acb-b018-dd955ae0e8aa](https://github.com/user-attachments/assets/9e438ab8-809c-47df-9b8f-b3359d797b1b)
-
+https://github.com/user-attachments/assets/c1a37d8c-05b0-4466-aa76-2af23331c14f
 
 1. **Scrap de Dados (Lambda)**: A função Lambda extrai dados do site da B3 e os envia para o bucket S3 de dados brutos.  
 2. **Bucket S3 (Dados Brutos)**: Armazena os dados brutos em formato parquet, particionados diariamente.  
