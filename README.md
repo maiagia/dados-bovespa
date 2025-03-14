@@ -7,6 +7,10 @@
 - Maiara Giavoni  
 - Rafael Tafelli dos Santos 
 
+## Tech Challenge - Fase 3
+
+
+## Tech Challenge - Fase 2
 https://github.com/user-attachments/assets/d8f6d0f6-3d8c-4ed4-9d62-667b1078d489
 
 ## Descrição do Projeto
