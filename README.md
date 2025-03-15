@@ -29,11 +29,9 @@ A seguir, indicamos onde cada requisito do **Tech Challenge - Fase 3** foi atend
 
 3. **Código no GitHub com documentação completa:**  
    - Todo o código está disponível no repositório, junto com este README e demais documentações.  
-   - **Mais detalhes:** [GitHub do Projeto](https://github.com/maiagia/dados-bovespa).
 
 4. **Storytelling explicando todas as etapas do projeto em vídeo:**  
    - Criamos um vídeo explicativo abordando desde a coleta de dados até a previsão dos resultados.  
-   - **Mais detalhes:** [Link para o vídeo] (inserir link do vídeo).
 
 5. **Modelo produtivo alimentando uma aplicação ou dashboard:**  
    - Implementamos um **dashboard interativo** que apresenta os resultados das previsões do modelo, permitindo análise dinâmica.  
@@ -84,17 +82,6 @@ Esses resultados indicam que o modelo apresenta um erro baixo e previsões confi
 ### **Dashboard Interativo**
 
 O código do projeto inclui a implementação de um dashboard interativo para visualizar as previsões geradas pelo modelo. Esse dashboard permite a análise detalhada das tendências do mercado financeiro e a comparação entre os valores previstos e os valores reais.
-
-#### **Recursos Implementados no Código:**
-- **Visualização das previsões do modelo** utilizando bibliotecas como Matplotlib e Seaborn.
-- **Comparação entre previsões e valores reais**, permitindo avaliar a precisão do modelo.
-- **Exportação de gráficos**, facilitando a análise e documentação dos resultados.
-- **Possibilidade de novos filtros e personalizações**, permitindo ajustes conforme necessário.
-- **Gráficos interativos** mostrando tendências do mercado.
-- **Filtros personalizáveis** para segmentação dos dados.
-- **Métricas e indicadores financeiros**, incluindo variações e volatilidade.
-- **Atualização em tempo real**, permitindo novas análises conforme novos dados são recebidos.
-- **Comparação entre previsões e dados reais**, avaliando a performance do modelo.
 
 ---
 
