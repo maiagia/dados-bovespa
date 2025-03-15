@@ -7,7 +7,112 @@
 - Maiara Giavoni  
 - Rafael Tafelli dos Santos 
 
-## Tech Challenge - Fase 3
+## **Tech Challenge - Fase 3**
+
+Nesta fase, foi desenvolvido um modelo de **Machine Learning** para previsão de dados do mercado financeiro, utilizando dados extraídos e armazenados na **Fase 2**. O objetivo foi aprimorar as análises e fornecer uma interface interativa para interpretação dos resultados.
+
+### **Objetivo do Projeto**
+
+Criar um modelo preditivo para identificar tendências no mercado de ações, utilizando técnicas avançadas de Machine Learning. O pipeline completo inclui coleta de dados, processamento, modelagem e visualização interativa.
+
+### **Atendimento aos Requisitos**
+
+A seguir, indicamos onde cada requisito do **Tech Challenge - Fase 3** foi atendido:
+
+1. **API para coleta de dados em tempo real e armazenamento em Data Lake:**  
+   - Reaproveitamos a **API desenvolvida na Fase 2** para coletar dados do mercado financeiro e armazená-los no **AWS S3**.  
+   - **Mais detalhes:** Seção **"Tech Challenge - Fase 2"**.
+
+2. **Construção de um modelo de Machine Learning:**  
+   - Desenvolvemos um modelo utilizando **Random Forest Regressor** para prever tendências do mercado financeiro.  
+   - **Mais detalhes:** Seção **"Construção do Modelo de Machine Learning"**.
+
+3. **Código no GitHub com documentação completa:**  
+   - Todo o código está disponível no repositório, junto com este README e demais documentações.  
+   - **Mais detalhes:** [GitHub do Projeto](https://github.com/maiagia/dados-bovespa).
+
+4. **Storytelling explicando todas as etapas do projeto em vídeo:**  
+   - Criamos um vídeo explicativo abordando desde a coleta de dados até a previsão dos resultados.  
+   - **Mais detalhes:** [Link para o vídeo] (inserir link do vídeo).
+
+5. **Modelo produtivo alimentando uma aplicação ou dashboard:**  
+   - Implementamos um **dashboard interativo** que apresenta os resultados das previsões do modelo, permitindo análise dinâmica.  
+   - **Mais detalhes:** Seção **"Dashboard Interativo"**.
+
+### **Principais Entregáveis:**
+
+- **Modelo de Machine Learning** baseado em **Random Forest Regressor**.
+- **API de coleta de dados**, reaproveitada da **Fase 2**.
+- **Armazenamento no AWS S3**, garantindo escalabilidade.
+- **Dashboard interativo** para análise das previsões.
+- **Storytelling do projeto**, documentado em vídeo.
+
+### **Construção do Modelo de Machine Learning**
+
+#### **Pré-processamento dos Dados:**
+- Tratamento de valores nulos e outliers.
+- Normalização e padronização das variáveis.
+- Seleção das principais características.
+- Conversão de formatos para compatibilidade com o modelo.
+
+#### **Divisão dos Dados:**
+- Separação em **80% treino** e **20% teste** para garantir uma avaliação justa do modelo.
+
+#### **Escolha do Algoritmo:**
+- **Random Forest Regressor** foi escolhido por sua robustez, capacidade de generalização e eficiência na modelagem de séries temporais e dados financeiros.
+
+#### **Treinamento do Modelo:**
+- Ajuste de hiperparâmetros, incluindo:
+  - Número de trees na Random Forest.
+  - Profundidade máxima das trees.
+  - Critério de divisão das trees.
+- Validação cruzada para evitar overfitting e melhorar a generalização do modelo.
+- Ajuste de pesos para lidar com variáveis de maior impacto no mercado.
+
+#### **Avaliação do Modelo:**
+- **MAE (Erro Absoluto Médio):** 0.0417
+- **MSE (Erro Quadrático Médio):** 0.0101
+- **RMSE (Raiz do Erro Quadrático Médio):** 0.1006
+
+Esses resultados indicam que o modelo apresenta um erro baixo e previsões confiáveis, permitindo uma boa adaptação às variações do mercado.
+
+#### **Exportação do Modelo:**
+- O modelo foi salvo no formato serializado para futuras execuções e otimizações.
+- Implementação de um pipeline automatizado para reentrenamento conforme novos dados forem incorporados.
+- Integração direta com o **dashboard interativo** para análise contínua dos resultados.
+
+### **Dashboard Interativo**
+
+O código do projeto inclui a implementação de um dashboard interativo para visualizar as previsões geradas pelo modelo. Esse dashboard permite a análise detalhada das tendências do mercado financeiro e a comparação entre os valores previstos e os valores reais.
+
+#### **Recursos Implementados no Código:**
+- **Visualização das previsões do modelo** utilizando bibliotecas como Matplotlib e Seaborn.
+- **Comparação entre previsões e valores reais**, permitindo avaliar a precisão do modelo.
+- **Exportação de gráficos**, facilitando a análise e documentação dos resultados.
+- **Possibilidade de novos filtros e personalizações**, permitindo ajustes conforme necessário.
+- **Gráficos interativos** mostrando tendências do mercado.
+- **Filtros personalizáveis** para segmentação dos dados.
+- **Métricas e indicadores financeiros**, incluindo variações e volatilidade.
+- **Atualização em tempo real**, permitindo novas análises conforme novos dados são recebidos.
+- **Comparação entre previsões e dados reais**, avaliando a performance do modelo.
+
+---
+
+## **Conclusão sobre o Modelo**
+
+O modelo desenvolvido demonstrou **boa capacidade preditiva**, com baixos índices de erro e uma abordagem escalável para análise financeira. A combinação de **Random Forest Regressor** com um pipeline estruturado permitiu previsões confiáveis, ajudando na tomada de decisão no mercado financeiro.
+
+Pontos-chave do modelo:
+- **Baixo erro médio**, indicando alta precisão nas previsões.
+- **Adaptação às flutuações do mercado**, garantindo previsões consistentes.
+- **Facilidade de reentrenamento**, permitindo melhoria contínua com novos dados.
+- **Integração com dashboard**, tornando os insights acessíveis e fáceis de interpretar.
+
+Com essa abordagem, garantimos uma solução **precisa, escalável e eficiente**, agregando valor real à análise do mercado financeiro.
+
+📌 **Repositório:** [GitHub do Projeto](https://github.com/maiagia/dados-bovespa)  
+📽️ **Vídeo Explicativo:** (inserir link do vídeo)
+
 
 
 ## Tech Challenge - Fase 2
