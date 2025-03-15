@@ -9,6 +9,8 @@
 
 ## **Tech Challenge - Fase 3**
 
+📽️ **Vídeo Explicativo:** 
+
 Nesta fase, foi desenvolvido um modelo de **Machine Learning** para previsão de dados do mercado financeiro, utilizando dados extraídos e armazenados na **Fase 2**. O objetivo foi aprimorar as análises e fornecer uma interface interativa para interpretação dos resultados.
 
 ### **Objetivo do Projeto**
@@ -98,8 +100,6 @@ Pontos-chave do modelo:
 Com essa abordagem, garantimos uma solução **precisa, escalável e eficiente**, agregando valor real à análise do mercado financeiro.
 
 📌 **Repositório:** [GitHub do Projeto](https://github.com/maiagia/dados-bovespa)  
-📽️ **Vídeo Explicativo:** (inserir link do vídeo)
-
 
 
 ## Tech Challenge - Fase 2
