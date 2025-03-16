@@ -11,6 +11,8 @@
 
 📽️ **Vídeo Explicativo:** 
 
+
+
 Nesta fase, foi desenvolvido um modelo de **Machine Learning** para previsão de dados do mercado financeiro, utilizando dados extraídos e armazenados na **Fase 2**. O objetivo foi aprimorar as análises e fornecer uma interface interativa para interpretação dos resultados.
 
 ### **Objetivo do Projeto**
